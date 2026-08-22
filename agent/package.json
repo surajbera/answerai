@@ -1,0 +1,32 @@
+{
+  "name": "answerai",
+  "version": "2.0.0",
+  "description": "AI-powered search tool with LangChain v1 - cost-aware routing with Serper",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.25",
+    "@types/html-to-text": "^9.0.4",
+    "@types/node": "^24.9.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@langchain/community": "^0.3.0",
+    "@langchain/core": "^1.0.2",
+    "@langchain/openai": "^1.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "html-to-text": "^9.0.5",
+    "langchain": "^0.3.0",
+    "zod": "^4.1.12"
+  }
+}
