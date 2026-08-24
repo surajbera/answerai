@@ -6,6 +6,7 @@ const EnvSchema = z.object({
   OPENAI_API_KEY: z.string(),
   OPENAI_MODEL: z.string().default("gpt-5.6-luna"),
   SERPER_API_KEY: z.string(),
+  FIRECRAWL_API_KEY: z.string(),
 });
 
 export const env = EnvSchema.parse(process.env);

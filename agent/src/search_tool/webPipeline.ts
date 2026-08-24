@@ -1,12 +1,19 @@
 import { RunnableLambda, RunnableSequence } from "@langchain/core/runnables";
 import { webSearch } from "../utils/webSearch";
-import { openUrl } from "../utils/openUrl";
+import { fetchUrlContent } from "../utils/fetchUrlContent";
 import { summarize } from "../utils/summarize";
 import { candidate } from "./types";
-import { getChatModel } from "../shared/models";
+import { SearchResult, SearchResults } from "../utils/schemas";
+import { initOpenAIModel } from "../shared/models";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
 const setTopResults = 5;
+
+interface WebSearchInput {
+  q: string;
+  mode: "web" | "direct";
+  results: SearchResults;
+}
 
 export const webSearchStep = RunnableLambda.from(
   async (input: { q: string; mode: "web" | "direct" }) => {
@@ -20,7 +27,7 @@ export const webSearchStep = RunnableLambda.from(
 );
 
 export const openAndSummarizeStep = RunnableLambda.from(
-  async (input: { q: string; mode: "web" | "direct"; results: any[] }) => {
+  async (input: WebSearchInput) => {
     if (!Array.isArray(input.results) || input.results.length === 0) {
       return {
         ...input,
@@ -32,8 +39,8 @@ export const openAndSummarizeStep = RunnableLambda.from(
     const extractTopResults = input.results.slice(0, setTopResults);
 
     const settledResults = await Promise.allSettled(
-      extractTopResults.map(async (result: any) => {
-        const opened = await openUrl(result.url);
+      extractTopResults.map(async (result: SearchResult) => {
+        const opened = await fetchUrlContent(result.url);
         const summarizeContent = await summarize(opened.content);
 
         return {
@@ -49,11 +56,11 @@ export const openAndSummarizeStep = RunnableLambda.from(
 
     if (settledResultsPageSummaries.length === 0) {
       const fallbackSnippetSummaries = extractTopResults
-        .map((result: any) => ({
+        .map((result: SearchResult) => ({
           url: result.url,
           summary: String(result.snippet || result.title || "").trim(),
         }))
-        .filter((x: any) => x.summary.length > 0);
+        .filter((x) => x.summary.length > 0);
 
       return {
         ...input,
@@ -73,11 +80,11 @@ export const openAndSummarizeStep = RunnableLambda.from(
 export const ComposeStep = RunnableLambda.from(
   async (input: {
     q: string;
-    pageSummaries: Array<{ url: string; summary: string }>;
     mode: "web" | "direct";
+    pageSummaries: Array<{ url: string; summary: string }>;
     fallback: "no-results" | "snippets" | "none";
   }): Promise<candidate> => {
-    const model = getChatModel({ temperature: 0.2 });
+    const model = await initOpenAIModel({ temperature: 0.2 });
 
     if (!input.pageSummaries || input.pageSummaries.length === 0) {
       const directResponseFromModel = await model.invoke([
@@ -122,9 +129,7 @@ export const ComposeStep = RunnableLambda.from(
       ),
     ]);
 
-    const finalAns =
-      typeof res.content === "string" ? res.content : String(res.content);
-
+    const finalAns = typeof res.content === "string" ? res.content : String(res.content);
     const extractSources = input.pageSummaries.map((x) => x.url);
 
     return {

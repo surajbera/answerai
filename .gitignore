@@ -50,6 +50,9 @@ pnpm-lock.yaml
 tmp/
 temp/
 
+# Private local notes (never tracked)
+.local/
+
 # Frontend build outputs
 client/dist/
 client/build/

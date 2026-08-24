@@ -6,6 +6,8 @@ export const SearchResultSchema = z.object({
   snippet: z.string().optional().default(""),
 });
 
+export type SearchResult = z.infer<typeof SearchResultSchema>;
+
 export const SearchResultsSchema = z.array(SearchResultSchema).max(5);
 
 export type SearchResults = z.infer<typeof SearchResultsSchema>;
@@ -14,10 +16,12 @@ export const OpenUrlInputSchema = z.object({
   url: z.url(),
 });
 
-export const OpenUrlOutputSchema = z.object({
+export const FetchUrlContentOutputSchema = z.object({
   url: z.url(),
   content: z.string().min(1),
 });
+
+export type FetchUrlContentOutput = z.infer<typeof FetchUrlContentOutputSchema>;
 
 export const SummarizeInputSchema = z.object({
   text: z.string().min(50, "Need a bit more text to summarize"),

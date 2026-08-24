@@ -1,11 +1,11 @@
 import { RunnableLambda } from "@langchain/core/runnables";
 import { candidate } from "./types";
-import { getChatModel } from "../shared/models";
+import { initOpenAIModel } from "../shared/models";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
 export const directPath = RunnableLambda.from(
   async (input: { q: string; mode: "web" | "direct" }): Promise<candidate> => {
-    const model = getChatModel({ temperature: 0.2 });
+    const model = await initOpenAIModel({ temperature: 0.2 });
 
     const res = await model.invoke([
       new SystemMessage(

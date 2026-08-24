@@ -7,7 +7,7 @@ type ModelOpts = {
   maxTokens?: number;
 };
 
-export function getChatModel(opts: ModelOpts = {}): BaseChatModel {
+export async function initOpenAIModel(opts: ModelOpts = {}): Promise<BaseChatModel> {
   const temp = opts?.temperature ?? 0.2;
   const maxTokens = opts?.maxTokens;
 
