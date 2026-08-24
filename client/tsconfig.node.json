@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "es2023",
+    // target: "es2023" — Compiled JS kis JS version ke liye ho (yahan matter nahi 
+    // karta zyada kyunki noEmit: true hai, sirf type-checking ke liye use hota hai).
+    "lib": [
+      "ES2023"
+    ],
+    "types": [
+      "node"
+    ],
+    // @types/node include karo, taki process, __dirname jaise Node globals TS ko pata ho.
+    "skipLibCheck": true,
+    // true — node_modules ke andar ke .d.ts files ka deep type-check skip karo (compile speed fast rakhne ke liye).
+    /* Bundler mode */
+    "module": "nodenext",
+    "allowImportingTsExtensions": true,
+    // Import statements mein .ts extension likhne diya jaye (jaise import x from "./x.ts").
+    "verbatimModuleSyntax": true,
+    // Type-only imports ko explicitly import type likhna padega — TS unnecessary transform nahi karega.
+    "moduleDetection": "force",
+    // Har file ko module treat karo (script nahi), even agar usme import/export na ho.
+    "noEmit": true,
+    // TS sirf type-check karega, JS output generate nahi karega (Vite/esbuild actual compile karta hai).
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+    // switch mein agar case ke baad break bhool gaye to error dega (accidental fallthrough catch karta hai).
+  },
+  "include": [
+    "vite.config.ts"
+  ]
+}
+// My notes
+// solid config explanations
