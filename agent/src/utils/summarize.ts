@@ -7,7 +7,7 @@ export async function summarize(text: string) {
 
   const clipped = clip(raw, 4000);
 
-  const model = await initOpenAIModel({ temperature: 0.2 });
+  const model = await initOpenAIModel();
 
   const res = await model.invoke([
     new SystemMessage(

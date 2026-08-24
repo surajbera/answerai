@@ -84,7 +84,7 @@ export const ComposeStep = RunnableLambda.from(
     pageSummaries: Array<{ url: string; summary: string }>;
     fallback: "no-results" | "snippets" | "none";
   }): Promise<candidate> => {
-    const model = await initOpenAIModel({ temperature: 0.2 });
+    const model = await initOpenAIModel();
 
     if (!input.pageSummaries || input.pageSummaries.length === 0) {
       const directResponseFromModel = await model.invoke([

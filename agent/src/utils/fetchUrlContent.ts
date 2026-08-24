@@ -1,4 +1,4 @@
-import { FirecrawlApp } from "firecrawl";
+import FirecrawlApp from "firecrawl";
 import { env } from "../shared/env";
 import { FetchUrlContentOutputSchema } from "./schemas";
 

@@ -5,7 +5,7 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
 export const directPath = RunnableLambda.from(
   async (input: { q: string; mode: "web" | "direct" }): Promise<candidate> => {
-    const model = await initOpenAIModel({ temperature: 0.2 });
+    const model = await initOpenAIModel();
 
     const res = await model.invoke([
       new SystemMessage(
